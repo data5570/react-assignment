@@ -1,7 +1,7 @@
 // src/reducers/tweetsReducer.js
 const initialState = {
     tweets: [
-        { id: 1, content: 'Welcome to TweetApp!', timestamp: new Date().toISOString(), profilePhotoUrl: 'default-profile.png', likes: 0 },
+        { id: 1, content: 'Welcome to TweetApp!', timestamp: new Date().toISOString(), profilePhotoUrl: 'default-profile.png', likes: 4 },
         { id: 2, content: 'This is your feed. Start posting some tweets.', timestamp: new Date().toISOString(), profilePhotoUrl: 'default-profile.png', likes: 0 }
     ]
 };
