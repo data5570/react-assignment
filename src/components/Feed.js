@@ -1,27 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Card, CardContent, CardHeader, Avatar, Typography } from '@mui/material';
+import { Container, Card, CardContent, CardHeader, Avatar, Typography, IconButton } from '@mui/material';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'; // Import the like icon
+import { likeTweet } from '../actions/tweetActions';
 
-const FeedPage = ({ tweets }) => (
+const FeedPage = ({ tweets, likeTweet }) => (
   <Container maxWidth="md"> {/* Adjust maxWidth to "md" or "lg" for wider container */}
     <Typography variant="h4" gutterBottom>Feed</Typography>
     {tweets.map((tweet, index) => (
-      <Card key={index} style={{ marginBottom: '20px' }}> {/* Add spacing between cards */}
+      <Card key={tweet.id} style={{ marginBottom: '20px' }}> {/* Add spacing between cards */}
         <CardHeader
           avatar={<Avatar src={tweet.profilePhotoUrl} alt="Profile" />}
           title={tweet.content}
-          subheader={`Tweeted on ${new Date(tweet.timestamp).toLocaleString()} - Likes: ${tweet.likes}`}
+          subheader={<>Tweeted on {new Date(tweet.timestamp).toLocaleString()} 
+                    <>
+          <IconButton onClick={() => likeTweet(tweet.id)}>
+            <ThumbUpAltIcon />
+          </IconButton>
+          {tweet.likes}
+          </>
+          </>}
         />
         <CardContent>
-          {/* You can add more content here if needed */}
+
         </CardContent>
       </Card>
     ))}
   </Container>
 );
 
-const mapStateToProps = (state) => ({
-  tweets: state.tweets.tweets,
-});
 
-export default connect(mapStateToProps)(FeedPage);
+export default connect(
+  (state) => ({ tweets: state.tweets.tweets }),
+  { likeTweet }
+)(FeedPage);

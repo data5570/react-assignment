@@ -1,42 +1,56 @@
 
 import React, { useState } from 'react';
-import { Button, TextField, Container, Typography } from '@mui/material';
 import { connect } from 'react-redux';
 import { addTweet } from '../actions/tweetActions';
+import { Container, TextField, Button, FormHelperText, Typography } from '@mui/material';
 
-const HomePage = (props) => {
-  const [tweet, setTweet] = useState('');
+const HomePage = ({ addTweet }) => {
+  const [tweetContent, setTweetContent] = useState('');
+  const [error, setError] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // props.addTweet(tweet);
-    props.addTweet({ content: tweet, profilePhotoUrl: "optional-profile-photo-url.png" });
-    setTweet('');
+    if (!tweetContent.trim()) {
+      setError(true);
+      return;
+    }
+    addTweet({
+      id: Date.now(), // Using timestamp as a mock ID
+      content: tweetContent,
+      timestamp: new Date().toISOString(),
+      profilePhotoUrl: 'default-profile.png', // This should be dynamic in a real app
+      likes: 0,
+    });
+    setTweetContent('');
+    setError(false); // Reset error state if submission is successful
   };
+
+  const handleChange = (event) => {
+    setError(false); // Remove error when user starts typing
+    setTweetContent(event.target.value);
+  };
+
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Post a Tweet
-      </Typography>
-      <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <Typography variant="h4" gutterBottom>Home</Typography>
+      <form onSubmit={handleSubmit} noValidate>
         <TextField
-          label="What's happening?"
-          variant="outlined"
           fullWidth
+          variant="outlined"
           margin="normal"
-          value={tweet}
-          onChange={(e) => setTweet(e.target.value)}
+          label="What's happening?"
+          value={tweetContent}
+          onChange={handleChange}
+          error={error}
+          helperText={error ? "This field is required" : ""}
         />
-        <Button variant="contained" color="primary" type="submit">
+        <Button type="submit" variant="contained" color="primary">
           Tweet
         </Button>
+        {error && <FormHelperText error>{error ? "You can't send an empty tweet." : ""}</FormHelperText>}
       </form>
     </Container>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    addTweet: (tweet) => dispatch(addTweet(tweet)),
-  });
-  
-export default connect(null, mapDispatchToProps)(HomePage);
+export default connect(null, { addTweet })(HomePage);
