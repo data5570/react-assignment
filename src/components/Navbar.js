@@ -15,6 +15,9 @@ const Navbar = () => {
         <Button color="inherit" component={Link} to="/feed">
           Feed
         </Button>
+        <Button color="inherit" component={Link} to="/profile">
+          Profile
+        </Button>
       </Toolbar>
     </AppBar>
   );
